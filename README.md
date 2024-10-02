@@ -8,7 +8,7 @@ This project, an initiative of SCD Hub, aims to revolutionize waste management b
 
 Each region presents unique challenges and opportunities in waste management, particularly with regard to upcycling chains. By analyzing waste streams and identifying upcycling potential specific to each region, we aim to uncover valuable insights that support sustainable waste recovery efforts. Additionally, we focus on mapping the size and contents of anthropogenic-managed trash burn activities to protect human health, water quality, and the environment.
 
-[![Algorand](link-to-algorand-logo)](link-to-algorand-website)
+[![Multichain](link-to-algorand-logo)](link-to-algorand-website)
 [![Supabase](link-to-supabase-logo)](link-to-supabase-website)
 [![Leaflet](link-to-leaflet-logo)](link-to-leaflet-website)
 [![Exotopia](link-to-exotopia-logo)](https://exotopia.org)
@@ -83,32 +83,146 @@ Compile and analyze regional findings to produce reports detailing:
 
 ## Technology Stack
 
-### Algorand POAP Token and Exotopia.org NFT Implementation
 
-- Create Algorand Standard Asset (ASA) representing the POAP token using AlgoExplorer
-- Integrate with Exotopia.org's eco ops check-in system for enhanced tracking and rewarding of environmental activities
-- Configure tokens as non-divisible and potentially default frozen for controlled distribution
+# Multi-Chain Code Samples
 
-Example code (using Algorand SDK):
+# Multi-Chain Code Samples
+
+<details open>
+<summary>Solana</summary>
 
 ```javascript
-const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+// Solana code for object and universe location data
+const { Connection, PublicKey, Transaction, sendAndConfirmTransaction } = require('@solana/web3.js');
 
-// Define ASA parameters (name, symbol, total supply, etc.)
+async function storeUniverseData(connection, payer, programId, objectData, locationData) {
+    const instruction = new TransactionInstruction({
+        keys: [{ pubkey: payer.publicKey, isSigner: true, isWritable: true }],
+        programId,
+        data: Buffer.from(JSON.stringify({ objectData, locationData })),
+    });
 
-const params = await algodClient.getTransactionParams().do();
-const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-  from: creatorAddress,
-  total: totalSupply,
-  decimals: 0, // Non-divisible token
-  assetName: "Eco Ops Attendance",
-  unitName: "ECO-OPS",
-  // Other ASA parameters
-  suggestedParams: params,
-});
-
-// Sign and send the transaction
+    const transaction = new Transaction().add(instruction);
+    await sendAndConfirmTransaction(connection, transaction, [payer]);
+}
 ```
+
+</details>
+
+<details>
+<summary>Tron</summary>
+
+```javascript
+// Tron code for object and universe location data
+const TronWeb = require('tronweb');
+
+async function storeUniverseData(tronWeb, contractAddress, objectData, locationData) {
+    const contract = await tronWeb.contract().at(contractAddress);
+    await contract.storeData(JSON.stringify({ objectData, locationData })).send();
+}
+```
+
+</details>
+
+<details>
+<summary>Polygon</summary>
+
+```javascript
+// Polygon code for object and universe location data
+const ethers = require('ethers');
+
+async function storeUniverseData(provider, contractAddress, objectData, locationData) {
+    const contract = new ethers.Contract(contractAddress, ABI, provider.getSigner());
+    await contract.storeData(JSON.stringify({ objectData, locationData }));
+}
+```
+
+</details>
+
+<details>
+<summary>Celo</summary>
+
+```javascript
+// Celo code for object and universe location data
+const { newKit } = require('@celo/contractkit');
+
+async function storeUniverseData(kit, contractAddress, objectData, locationData) {
+    const contract = new kit.web3.eth.Contract(ABI, contractAddress);
+    await contract.methods.storeData(JSON.stringify({ objectData, locationData })).send({ from: kit.defaultAccount });
+}
+```
+
+</details>
+
+<details>
+<summary>Tezos</summary>
+
+```javascript
+// Tezos code for object and universe location data
+const { TezosToolkit } = require('@taquito/taquito');
+
+async function storeUniverseData(tezos, contractAddress, objectData, locationData) {
+    const contract = await tezos.contract.at(contractAddress);
+    await contract.methods.store(JSON.stringify({ objectData, locationData })).send();
+}
+```
+
+</details>
+
+<details>
+<summary>Hedera</summary>
+
+```javascript
+// Hedera code for object and universe location data
+const { Client, ContractExecuteTransaction, ContractId } = require("@hashgraph/sdk");
+
+async function storeUniverseData(client, contractId, objectData, locationData) {
+    const transaction = new ContractExecuteTransaction()
+        .setContractId(ContractId.fromString(contractId))
+        .setFunction("storeData", [JSON.stringify({ objectData, locationData })]);
+
+    await transaction.execute(client);
+}
+```
+
+</details>
+
+<details>
+<summary>NEAR</summary>
+
+```javascript
+// NEAR code for object and universe location data
+const nearAPI = require('near-api-js');
+
+async function storeUniverseData(near, contractName, objectData, locationData) {
+    const account = await near.account("example-account.testnet");
+    await account.functionCall({
+        contractId: contractName,
+        methodName: "store_data",
+        args: { data: JSON.stringify({ objectData, locationData }) }
+    });
+}
+```
+
+</details>
+
+<details>
+<summary>SAND</summary>
+
+```javascript
+// SAND (The Sandbox) code for object and universe location data
+// Note: This is a hypothetical example as SAND doesn't have a specific SDK for smart contract interactions
+const Web3 = require('web3');
+
+async function storeUniverseData(web3, contractAddress, objectData, locationData) {
+    const contract = new web3.eth.Contract(ABI, contractAddress);
+    await contract.methods.storeData(JSON.stringify({ objectData, locationData })).send({ from: web3.eth.defaultAccount });
+}
+```
+
+</details>
+
+
 
 ### Supabase Integration and RLS Policy
 
@@ -129,6 +243,10 @@ async function verifyEcoOpsParticipation(userId, tokenId) {
   // Implement logic to check if the user's wallet owns the specified token
 }
 ```
+
+
+
+
 
 ### Leaflet for Mapping
 
