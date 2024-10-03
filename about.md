@@ -77,6 +77,6 @@ Compile and analyze regional findings to produce reports detailing:
 
 ## Technology Stack
 
-### Addendum: [Algorand NFT Minting and Login Example](https://github.com/your-repo-link)
+### Addendum: [Algorand NFT Minting and Login Example](algorand-poap.md)
 
 To learn more about how we use blockchain technology to mint NFTs that log user participation in the upcycling initiative, please refer to our GitHub repository with a detailed code example for Algorand NFT minting and login functionality.
